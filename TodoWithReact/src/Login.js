@@ -1,8 +1,8 @@
 import React from 'react';
-import axios from 'axios';
 import history from './history';
 import { Link } from 'react-router-dom'
 import Register from './Register';
+import RequestService from './RequestService';
 
 export class Login extends React.Component {
   constructor(props) {
@@ -19,11 +19,13 @@ export class Login extends React.Component {
       alert('Please fill all the credentials..');
       return false;
     }
-    axios({
-      method: 'get',
-      url: `http://localhost:8080/todos/getUserByUsername/${this.state.username}`
-    }).then((response) => {
-      if (JSON.stringify(response.data) === "\"\"") {
+    RequestService.save('http://localhost:8080/todos/getUser', { username : this.state.username , password : this.state.password})
+    .then((response) => {
+      if (response.data === "WrongPassword") {
+        alert("Sorry you entered wrong password");
+        history.push('/');
+        window.location.reload()
+      } else if (response.data === "RegisterFirst") {
         alert("Sorry You need to register first ....");
         history.push('/');
         window.location.reload()

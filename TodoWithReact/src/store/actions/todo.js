@@ -1,4 +1,4 @@
-import axios from 'axios';
+import RequestService from '../../RequestService';
 
 export const ADD_TODO = 'ADD_TODO';
 export const DELETE_TODO = 'DELETE_TODO';
@@ -34,10 +34,8 @@ export const updateTodo = (id, textToSet) => ({
 
 export const getTodo = () => {
   return dispatch => {
-    axios({
-      method: 'get',
-      url: `http://localhost:8080/todos/all`
-    }).then((response) => {
+    return RequestService.fetch('http://localhost:8080/todos/all')
+    .then((response) => {
       dispatch(loadTodo(response.data));
     }).catch((err) => {
       console.error(err);
@@ -47,14 +45,8 @@ export const getTodo = () => {
 
 export const saveTodo = (id, textToAdd) => {
   return dispatch => {
-    axios({
-      method: 'post',
-      url: 'http://localhost:8080/todos/add',
-      data: {
-        id: id,
-        desc: textToAdd,
-      }
-    }).then((response) => {
+    return RequestService.save('http://localhost:8080/todos/add', { id : id, desc : textToAdd })
+    .then((response) => {
       dispatch(addTodo(response.data));
     }).catch((err) => {
       console.error(err);
@@ -64,10 +56,8 @@ export const saveTodo = (id, textToAdd) => {
 
 export const removeTodo = (id) => {
   return dispatch => {
-    axios({
-      method: 'delete',
-      url: `http://localhost:8080/todos/delete/${id}`
-    }).then((response) => {
+    return RequestService.delete(`http://localhost:8080/todos/delete/${id}`)
+    .then((response) => {
       dispatch(deleteTodo(id));
     }).catch((err) => {
       console.error(err);
@@ -77,14 +67,8 @@ export const removeTodo = (id) => {
 
 export const editTodo = (id, textToSet) => {
   return dispatch => {
-    axios({
-      method: 'put',
-      url: `http://localhost:8080/todos/update`,
-      data: {
-        id: id,
-        desc: textToSet,
-      }
-    }).then((response) => {
+    return RequestService.update(`http://localhost:8080/todos/update`, { id : id , desc : textToSet})
+    .then((response) => {
       dispatch(updateTodo(id, textToSet));
     }).catch((err) => {
       console.error(err);
@@ -94,21 +78,16 @@ export const editTodo = (id, textToSet) => {
 
 export const registerUser = (user) => {
   return dispatch => {
-    axios({
-      method: 'get',
-      url: `http://localhost:8080/todos/getMaxUser`
-    }).then((response) => {
-      axios({
-        method: 'post',
-        url: 'http://localhost:8080/todos/addUser',
-        data: {
-          id: response.data.id,
-          name: user.name,
-          username: user.username,
-          password: user.password,
-          email: user.email,
-        }
-      }).then((response) => {
+    return RequestService.fetch('http://localhost:8080/todos/getMaxUser')
+    .then((response) => {
+      return RequestService.save('http://localhost:8080/todos/addUser', {
+        id: response.data.id,
+        name: user.name,
+        username: user.username,
+        password: user.password,
+        email: user.email,
+      })
+      .then((response) => {
         dispatch(registerNewUser(response.data));
       }).catch((err) => {
         console.error(err);

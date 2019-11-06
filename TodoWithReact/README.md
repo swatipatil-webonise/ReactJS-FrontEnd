@@ -31,21 +31,12 @@ To run this project :
 1) Extract the zip in visual studio's workspace.
 2) Open the project in visual studio code.
 3) Open terminal.
-4) Execute following steps : 
-    a) npm install react
-    b) npm install react-router-dom
-    c) npm intsall react-dom
-    d) npm install redux
-    e) npm install react-redux
-    d) npm install axios
-    f) npm install redux-thunk
-    g) npm start
-    h) Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-    i) Right click To inspect code.
-    j) See console to see errors if any.
+4) Npm install . 
+5) Npm start .
+6) Open [http://localhost:3000](http://localhost:3000) to view it in the browser .
+7) Right click To inspect code , See console to see errors if any.
 
 Learn More : 
-
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
