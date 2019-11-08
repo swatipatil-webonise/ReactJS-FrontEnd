@@ -1,22 +1,23 @@
-import axios from "axios";
+import axios from 'axios';
+
 const RequestService = {
-  fetch: (url, data) => {
-    return RequestService.request("get", url, data);
+  fetch (url, data) {
+    return this.request("get", url, data);
   },
 
-  save: (url, data) => {
-    return RequestService.request("post", url, data);
+  save (url, data) {
+    return this.request("post", url, data);
   },
 
-  update: (url, data) => {
-    return RequestService.request("put", url, data);
+  update (url, data) {
+    return this.request("put", url, data);
   },
 
-  delete: (url, data) => {
-    return RequestService.request("delete", url, data);
+  delete (url, data) {
+    return this.request("delete", url, data);
   },
 
-  request: (method, url, data, cancelToken) => {
+  request (method, url, data, cancelToken) {
     return axios({
       method,
       url,

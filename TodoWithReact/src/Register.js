@@ -1,113 +1,63 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { getTodo, registerUser } from './store/actions/todo';
-const VALIDEMAILREGEX = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
-const NAME_FORMAT = /^[a-zA-Z]+$/;
+import RequestService from './RequestService';
+import history from './history';
+const Email_Format = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
 
-class Register extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      firstname: '',
-      username: '',
-      password: '',
-      email: '',
+export default class Register extends React.Component {
+
+  validateFields = () => {
+    let render = true;
+    if (this.refs.firstnameRef.value === '' || this.refs.usernameRef.value === '' || this.refs.passwordRef.value === '' || this.refs.emailRef.value === '') {
+      alert("Please fill all the fields.");
+      render = false;
+    } else if (! Email_Format.test(this.refs.emailRef.value)) {
+      alert("Please enter correct email id.");
+      this.refs.emailRef.value = ''
+      render = false;
+    } 
+    if (render) {
+      this.registerUser();
     }
   }
 
-  initUsername = (event) => {
-    this.setState({
-      username: event.target.value,
+  registerUser = () => {
+    RequestService.save('http://localhost:8080/register', {
+      name: this.refs.firstnameRef.value,
+      username: this.refs.usernameRef.value,
+      password: this.refs.passwordRef.value,
+      email: this.refs.emailRef.value
     })
-  }
-
-  initPassword = (event) => {
-    this.setState({
-      password: event.target.value,
+    .then((response) => {
+      if(response.status === 200) {
+        alert("You registered successfully.")
+        history.push('/');
+        window.location.reload()
+      }
+    }).catch((err) => {
+      if (err.response.status === 409) {
+        alert (err.response.data);
+        this.refs.usernameRef.value = '';
+      } else {
+        alert (err.response.data);
+        this.refs.emailRef.value = '';
+      }
     })
-  }
-
-  initFirstname = (event) => {
-    this.setState({
-      firstname: event.target.value,
-    });
-  }
-
-  initEmail = (event) => {
-    this.setState({
-      email: event.target.value,
-    })
-  }
-
-  componentDidMount() {
-    this.props.getTodo();
-  }
-
-  registerMe = () => {
-    if (this.state.firstname === '' || this.state.username === '' || this.state.password === '' || this.state.email === '') {
-      alert("Please fill all the details...");
-        return false;
-      }
-      if (NAME_FORMAT.test(this.state.firstname) === false) {
-        alert("Please enter proper name...");
-        this.setState({
-          firstname: '',
-        })
-          return false;
-      }
-      if (this.state.password.length < 8) {
-        alert("Your password is too short ...");
-        this.setState({
-          password: '',
-        })
-        return false;
-      }
-      if (VALIDEMAILREGEX.test(this.state.email) === false) {
-        alert("Email you entered is not valid..");
-        this.setState({
-          email: '',
-        })
-        return false;
-      }
-      else {
-        let user = {
-        name: this.state.firstname,
-        username: this.state.username,
-        password: this.state.password,
-        email: this.state.email,
-      }
-      this.props.registerUser(user);
-    }
   }
 
   render() {
     return (
-      <div>
+      <form>
         <center><br></br>
           <h1>Register yourself here.......</h1><br></br>
           <table>
-            <tr><td>First Name : </td><td><input type="text" value={this.state.firstname} onChange={this.initFirstname} required /></td></tr>
-            <tr><td>Username : </td><td><input type="text" value={this.state.username} onChange={this.initUsername} required="required" /></td></tr>
-            <tr><td>Password : </td><td><input type="password" value={this.state.password} onChange={this.initPassword} required="required" /></td></tr>
-            <tr><td>Email : </td><td><input type="email" value={this.state.email} onChange={this.initEmail} required="required" /></td></tr>
+            <tr><td>First Name : </td><td><input type="text" ref="firstnameRef" /></td></tr>
+            <tr><td>Username : </td><td><input type="text" ref="usernameRef" /></td></tr>
+            <tr><td>Password : </td><td><input type="password" ref="passwordRef"  /></td></tr>
+            <tr><td>Email : </td><td><input type="email" ref="emailRef" /></td></tr>
           </table>
-          <input type="button" value="Register" onClick={this.registerMe.bind(this)}></input><br /><br /><br />
+          <input type="button" value="Register" onClick={this.validateFields.bind(this)}></input><br /><br /><br />
         </center>
-      </div>
+      </form>
     );
   }
 }
-
-const mapStateToProps = state => ({
-  todoData: state.todos,
-});
-
-const mapDispatchToProps = dispatch => ({
-  getTodo: () => dispatch(getTodo()),
-  registerUser: (user) => dispatch(registerUser(user)),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Register); 

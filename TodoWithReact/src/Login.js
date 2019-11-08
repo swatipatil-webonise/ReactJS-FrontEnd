@@ -3,60 +3,49 @@ import history from './history';
 import { Link } from 'react-router-dom'
 import Register from './Register';
 import RequestService from './RequestService';
-
 export class Login extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: '',
-      password: '',
+  
+  validateFields = () => {
+    let render = true;
+    if(this.refs.usernameRef.value === '' || this.refs.passwordRef.value === '') {
+      alert("Please fill all the fields.");
+      render = false;
+    } 
+    if (render) {
+      this.isValidUser();
     }
   }
 
-  isValid = (event) => {
-    if (this.state.username === '' || this.state.password === '') {
-      event.preventDefault();
-      alert('Please fill all the credentials..');
-      return false;
-    }
-    RequestService.save('http://localhost:8080/todos/getUser', { username : this.state.username , password : this.state.password})
+  isValidUser = () => {
+    RequestService.save('http://localhost:8080/login', { username: this.refs.usernameRef.value, password: this.refs.passwordRef.value })
     .then((response) => {
-      if (response.data === "WrongPassword") {
-        alert("Sorry you entered wrong password");
-        history.push('/');
-        window.location.reload()
-      } else if (response.data === "RegisterFirst") {
-        alert("Sorry You need to register first ....");
-        history.push('/');
-        window.location.reload()
-      } else {
-        history.push('/view');
-        window.location.reload()
+      if (response.status === 200) {
+        if (response.data) { 
+          history.push('/view');
+          window.location.reload()
+        } else {
+          alert("Sorry you entered wrong password.");
+          this.refs.passwordRef.value = '';
+        }
       }
     }).catch((err) => {
-      console.error(err);
-    })
-  }
-
-  initUsername = (event) => {
-    this.setState({
-      username: event.target.value,
-    })
-  }
-
-  initPassword = (event) => {
-    this.setState({
-      password: event.target.value,
+      if (err.response.status === 404) {
+        alert ("You need to register yourself first.");
+        this.refs.usernameRef.value = this.refs.passwordRef.value = '';
+      }
     })
   }
 
   render() {
     return (
-      <center><br /><br /><br /><h1>Enter your credentials ....</h1><br />
-        Username : <input type="text" value={this.state.username} onChange={this.initUsername} /><br /><br />
-        Password : <input type="password" value={this.state.password} onChange={this.initPassword} /><br /><br />
-        <input type="button" value="Login" onClick={this.isValid.bind(this)}></input><br /><br /><br />
-        <Link to="/register" Component={Register}>register here!</Link>
+      <center>
+        <form>
+          <br /><br /><br /><h1>Enter your credentials ....</h1><br />
+          Username : <input type="text" ref="usernameRef" /><br /><br />
+          Password : <input type="password" ref="passwordRef"  /><br /><br />
+          <input type="button" value="Login" onClick={this.validateFields.bind()}></input><br /><br /><br />
+          <Link to="/register" Component={Register}>register here!</Link>
+        </form>
       </center>
     );
   }

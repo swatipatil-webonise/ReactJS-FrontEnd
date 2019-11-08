@@ -12,7 +12,7 @@ class Todo extends React.Component {
       isUpdate: false,
       buttonValue: 'Add',
       updateId: -1,
-      nextId : 0,
+      nextId: 0,
     };
   }
 
@@ -28,12 +28,12 @@ class Todo extends React.Component {
   };
 
   onAddTodo = () => {
-    if(this.state.description === '') {
+    if (this.state.description === '') {
       alert('Please fill the feilds .');
       return;
     }
     if (this.state.isUpdate) {
-      this.props.updateTodo(this.state.updateId, this.state.description);
+      this.props.editTodo(this.state.updateId, this.state.description);
       this.setState({
         description: '',
         isUpdate: false,
@@ -41,7 +41,7 @@ class Todo extends React.Component {
         updateId: -1,
       })
     } else {
-      this.props.addTodo(this.props.todoData.length+1,this.state.description);
+      this.props.saveTodo(this.props.todoData.length + 1, this.state.description);
       this.setState({
         description: '',
       })
@@ -49,7 +49,7 @@ class Todo extends React.Component {
   }
 
   onDelete = (id) => {
-    this.props.deleteTodo(id);
+    this.props.removeTodo(id);
   }
 
   onEdit = (id) => {
@@ -64,13 +64,13 @@ class Todo extends React.Component {
 
   render() {
     return (
-      <div>
+      <>
         <center><br></br>
           <h1>Welcome to our todo app...</h1><br></br>
           <AddTodo buttonValue={this.state.buttonValue} description={this.state.description} onUserType={this.onUserType} onAddTodo={this.onAddTodo} /><br></br><br></br>
           <ListTodo todos={this.props.todoData} onDelete={this.onDelete} onEdit={this.onEdit} />
         </center>
-      </div>
+      </>
     );
   }
 }
@@ -79,12 +79,12 @@ const mapStateToProps = state => ({
   todoData: state.todos,
 });
 
-const mapDispatchToProps = dispatch => ({
-  getTodo: () => dispatch(getTodo()),
-  addTodo: (id,textToAdd) => dispatch(saveTodo(id,textToAdd)),
-  deleteTodo: (id) => dispatch(removeTodo(id)),
-  updateTodo: (id, textToSet) => dispatch(editTodo(id, textToSet)),
-});
+const mapDispatchToProps = {
+  getTodo,
+  saveTodo,
+  removeTodo,
+  editTodo
+};
 
 export default connect(
   mapStateToProps,
