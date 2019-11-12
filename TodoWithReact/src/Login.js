@@ -2,7 +2,7 @@ import React from 'react';
 import history from './history';
 import { Link } from 'react-router-dom'
 import Register from './Register';
-import RequestService from './RequestService';
+
 export class Login extends React.Component {
   
   validateFields = () => {
@@ -17,22 +17,18 @@ export class Login extends React.Component {
   }
 
   isValidUser = () => {
-    RequestService.save('http://localhost:8080/login', { username: this.refs.usernameRef.value, password: this.refs.passwordRef.value })
-    .then((response) => {
-      if (response.status === 200) {
-        if (response.data) { 
-          history.push('/view');
-          window.location.reload()
-        } else {
-          alert("Sorry you entered wrong password.");
-          this.refs.passwordRef.value = '';
-        }
-      }
+    return fetch('http://localhost:8080/authenticate', {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username: this.refs.usernameRef.value, password: this.refs.passwordRef.value })
+    })
+    .then(response => response.json())
+    .then(json => {alert(json);
     }).catch((err) => {
-      if (err.response.status === 404) {
-        alert ("You need to register yourself first.");
-        this.refs.usernameRef.value = this.refs.passwordRef.value = '';
-      }
+      console.log(err);
     })
   }
 

@@ -15,7 +15,7 @@ Platform Used : Ubuntu 16.04
 Technologies :  
     a) React
     b) React-Router
-    c) React-axios
+    c) React-axios 
 
 Applications needed : 
     1) npm

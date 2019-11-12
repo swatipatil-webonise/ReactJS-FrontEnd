@@ -19,7 +19,7 @@ class Todo extends React.Component {
   componentDidMount() {
     this.props.getTodo();
   }
-
+  
   onUserType = event => {
     let value = event.target.value;
     this.setState({
