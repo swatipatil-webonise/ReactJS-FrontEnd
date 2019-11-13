@@ -37,13 +37,16 @@ export const getTodo = () => {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache'
       }
     })
     .then(response => response.json())
     .then(json => {
       dispatch(loadTodo(json));
     }).catch(err => {
-      console.log(err);
+      if(err) {
+        alert('Unauthorized request found.');
+      }
     })
   }
 }
@@ -64,7 +67,9 @@ export const saveTodo = (id, textToAdd) => {
     .then(json => {
       dispatch(addTodo(json));
     }).catch((err) => {
-      console.error(err);
+      if(err) {
+        alert('Unauthorized request found.');
+      }
     })
   }
 }
@@ -80,10 +85,13 @@ export const removeTodo = (id) => {
         'Content-Type': 'application/json',
       }
     })
-    .then(() => {
-      dispatch(deleteTodo(id));
+    .then(response => response.json())
+    .then(json => { 
+      if ( json === 1) {
+        dispatch(deleteTodo(id));
+      } 
     }).catch((err) => {
-      console.error(err);
+      console.log(err);
     })
   }
 }
@@ -104,7 +112,9 @@ export const editTodo = (id, textToSet) => {
     .then(json => {
       dispatch(updateTodo(json.id,json.desc));
     }).catch((err) => {
-      console.error(err);
+      if(err) {
+        alert('Unauthorized request found.');
+      }
     })
   }
 }
