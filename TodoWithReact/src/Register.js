@@ -1,5 +1,8 @@
 import React from 'react';
 import history from './history';
+import RequestService from './RequestService';
+import { url } from './url';
+
 const Email_Format = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
 
 export default class Register extends React.Component {
@@ -7,10 +10,10 @@ export default class Register extends React.Component {
   validateFields = () => {
     let render = true;
     if (this.refs.firstnameRef.value === '' || this.refs.usernameRef.value === '' || this.refs.passwordRef.value === '' || this.refs.emailRef.value === '') {
-      alert("Please fill all the fields.");
+      alert('Please fill all the fields.');
       render = false;
     } else if (!Email_Format.test(this.refs.emailRef.value)) {
-      alert("Please enter correct email id.");
+      alert('Please enter correct email id.');
       this.refs.emailRef.value = ''
       render = false;
     }
@@ -20,27 +23,26 @@ export default class Register extends React.Component {
   }
 
   registerUser = () => {
-    return fetch('http://localhost:8080/register', {
-      mode: "cors",
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: this.refs.firstnameRef.value,
-        username: this.refs.usernameRef.value,
-        password: this.refs.passwordRef.value,
-        email: this.refs.emailRef.value
-      })
+    RequestService.save(`${url}/register`, {
+      name: this.refs.firstnameRef.value,
+      username: this.refs.usernameRef.value,
+      password: this.refs.passwordRef.value,
+      email: this.refs.emailRef.value
     })
-    .then(response => { 
-          if(response.status === 200) {
-            alert("You registered successfully.")
-            history.push('/');
-            window.location.reload()
-          }
+    .then((response) => {
+      if (response.status === 200) {
+        alert('You registered successfully.')
+        history.push('/');
+        window.location.reload()
+      }
     }).catch((err) => {
-      console.log(err);
+      if (err.response.status === 409) {
+        alert(err.response.data);
+         this.refs.usernameRef.value = '';
+      } else {
+        alert(err.response.data);
+        this.refs.emailRef.value = '';
+      }
     })
   }
 

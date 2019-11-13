@@ -1,9 +1,11 @@
+import { url } from '../../url';
+
 export const ADD_TODO = 'ADD_TODO';
 export const DELETE_TODO = 'DELETE_TODO';
 export const UPDATE_TODO = 'UPDATE_TODO';
 export const LOAD_TODO = 'LOAD_TODO'
 
-const token = localStorage.getItem("token");
+const token = localStorage.getItem('token');
 
 export const loadTodo = (todos) => ({
   type: LOAD_TODO,
@@ -28,9 +30,9 @@ export const updateTodo = (id, textToSet) => ({
 
 export const getTodo = () => {
   return dispatch => {
-    return fetch("http://localhost:8080/todojobs/", {
-      mode: "cors",
-      method: "GET",
+    return fetch(`${url}/todojobs/`, {
+      mode: 'cors',
+      method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
@@ -48,9 +50,9 @@ export const getTodo = () => {
 
 export const saveTodo = (id, textToAdd) => {
   return dispatch => {
-    return fetch("http://localhost:8080/todojobs/", {
-      mode: "cors",
-      method: "POST",
+    return fetch(`${url}/todojobs/`, {
+      mode: 'cors',
+      method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
@@ -66,20 +68,20 @@ export const saveTodo = (id, textToAdd) => {
     })
   }
 }
-export const removeTodo = (id) => {debugger
+
+export const removeTodo = (id) => {
   return dispatch => {
-    return fetch(`http://localhost:8080/todojobs/${id}`, {
-      mode: "cors",
-      method: "DELETE",
+    return fetch(`${url}/todojobs/${id}`, {
+      mode: 'cors',
+      method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       }
     })
-    .then(response => response.json())
-    .then(json => {
-      dispatch(deleteTodo(json));
+    .then(() => {
+      dispatch(deleteTodo(id));
     }).catch((err) => {
       console.error(err);
     })
@@ -88,9 +90,9 @@ export const removeTodo = (id) => {debugger
 
 export const editTodo = (id, textToSet) => {
   return dispatch => {
-    return fetch("http://localhost:8080/todojobs/", {
-      mode: "cors",
-      method: "PUT",
+    return fetch(`${url}/todojobs/`, {
+      mode: 'cors',
+      method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
@@ -98,8 +100,9 @@ export const editTodo = (id, textToSet) => {
       },
       body: JSON.stringify({ id: id, desc: textToSet })
     })
-    .then(() => {
-      dispatch(updateTodo(id, textToSet));
+    .then(response => response.json())
+    .then(json => {
+      dispatch(updateTodo(json.id,json.desc));
     }).catch((err) => {
       console.error(err);
     })
