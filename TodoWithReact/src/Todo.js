@@ -12,14 +12,13 @@ class Todo extends React.Component {
       isUpdate: false,
       buttonValue: 'Add',
       updateId: -1,
-      nextId: 0,
     };
   }
 
   componentDidMount() {
     this.props.getTodo();
   }
-  
+
   onUserType = event => {
     let value = event.target.value;
     this.setState({
@@ -69,12 +68,14 @@ class Todo extends React.Component {
 
   render() {
     return (
-      <>
+      <>{localStorage.getItem('isValid') ?
         <center><br></br>
           <h1>Welcome to our todo app...</h1><br></br>
           <AddTodo buttonValue={this.state.buttonValue} description={this.state.description} onUserType={this.onUserType} onAddTodo={this.onAddTodo} /><br></br><br></br>
-          <ListTodo todos={this.props.todoData} onDelete={this.onDelete} onEdit={this.onEdit} onLogout={this.onLogout}/>
-        </center>
+          <ListTodo todos={this.props.todoData} onDelete={this.onDelete} onEdit={this.onEdit} onLogout={this.onLogout} />
+        </center> :
+        <h1>404 Page not found</h1>
+      }
       </>
     );
   }
