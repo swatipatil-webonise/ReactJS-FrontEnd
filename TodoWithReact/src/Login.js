@@ -27,8 +27,8 @@ export class Login extends React.Component {
           this.props.history.push('/view');
         }
       }).catch((err) => {
-        if (err.message == 'Network Error') {
-          alert ('Server not available plz try after some time....');
+        if (err.message === 'Network Error') {
+          alert('Server not available plz try after some time....');
           this.refs.usernameRef.value = this.refs.passwordRef.value = '';
         } else if (err.response.status === 404) {
           alert('Sorry you need to register yourself first.');
@@ -36,20 +36,22 @@ export class Login extends React.Component {
         } else {
           alert('Sorry you entered incorrect password.');
           this.refs.passwordRef.value = '';
-        } 
+        }
       })
   }
 
   render() {
     return (
       <center>
-        <form>
-          <br /><br /><br /><h1>Enter your credentials ....</h1><br />
-          Username : <input type="text" ref="usernameRef" /><br /><br />
-          Password : <input type="password" ref="passwordRef" /><br /><br />
-          <input type="button" value="Login" onClick={this.validateFields.bind()}></input><br /><br /><br />
-          <Link to="/register" Component={Register}>register here!</Link>
-        </form>
+        {localStorage.getItem('isValid') ?
+          <h1>You are already logged in.</h1> :
+          <form>
+            <br /><br /><br /><h1>Enter your credentials ....</h1><br />
+            Username : <input type="text" ref="usernameRef" /><br /><br />
+            Password : <input type="password" ref="passwordRef" /><br /><br />
+            <input type="button" value="Login" onClick={this.validateFields.bind()}></input><br /><br /><br />
+            <Link to="/register">register here!</Link>
+          </form>}
       </center >
     );
   }
