@@ -12,6 +12,7 @@ manifest.json
 package-lock.json
 *.txt
 .test.js
+.gitignore
 # testing
 /coverage
 
