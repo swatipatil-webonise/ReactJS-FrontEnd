@@ -34,7 +34,10 @@ export default class Register extends React.Component {
         this.props.history.push('/');
       }
     }).catch((err) => {
-      if (err.response.status === 409) {
+      if(err.message == 'Network Error') {
+        alert ('Server not available plz try after some time....');
+        this.refs.usernameRef.value = this.refs.passwordRef.value = '';
+      } else if (err.response.status === 409) {
         alert(err.response.data);
          this.refs.usernameRef.value = '';
       } else {

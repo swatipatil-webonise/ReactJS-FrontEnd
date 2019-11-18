@@ -27,13 +27,16 @@ export class Login extends React.Component {
           this.props.history.push('/view');
         }
       }).catch((err) => {
-        if (err.response.status === 404) {
+        if (err.message == 'Network Error') {
+          alert ('Server not available plz try after some time....');
+          this.refs.usernameRef.value = this.refs.passwordRef.value = '';
+        } else if (err.response.status === 404) {
           alert('Sorry you need to register yourself first.');
           this.refs.usernameRef.value = this.refs.passwordRef.value = '';
         } else {
           alert('Sorry you entered incorrect password.');
           this.refs.passwordRef.value = '';
-        }
+        } 
       })
   }
 
