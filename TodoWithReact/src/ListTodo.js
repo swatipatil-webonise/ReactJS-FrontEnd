@@ -18,6 +18,7 @@ export class ListTodo extends React.Component{
 
   render() {
     return (
+      <div>
       <table border="1">
         <thead>
           <tr><th>Id</th><th>Task to perform</th><th>Edit</th><th>Delete</th></tr>
@@ -25,7 +26,10 @@ export class ListTodo extends React.Component{
         <tbody>
           {this.renderTodoList()}
         </tbody>
-      </table>
+      </table> 
+      <br/>
+        <button onClick={this.props.onLogout.bind(null)}>Log out</button>
+      </div>
     );
   }
 }

@@ -34,7 +34,7 @@ export const getTodo = () => {
       mode: 'cors',
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Cache-Control': 'no-cache'
@@ -57,7 +57,7 @@ export const saveTodo = (id, textToAdd) => {
       mode: 'cors',
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
@@ -80,7 +80,7 @@ export const removeTodo = (id) => {
       mode: 'cors',
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       }
@@ -102,7 +102,7 @@ export const editTodo = (id, textToSet) => {
       mode: 'cors',
       method: 'PUT',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },

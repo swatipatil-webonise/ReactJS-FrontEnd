@@ -62,13 +62,18 @@ class Todo extends React.Component {
     });
   }
 
+  onLogout = () => {
+    localStorage.clear();
+    window.location.href = '/';
+  }
+
   render() {
     return (
       <>
         <center><br></br>
           <h1>Welcome to our todo app...</h1><br></br>
           <AddTodo buttonValue={this.state.buttonValue} description={this.state.description} onUserType={this.onUserType} onAddTodo={this.onAddTodo} /><br></br><br></br>
-          <ListTodo todos={this.props.todoData} onDelete={this.onDelete} onEdit={this.onEdit} />
+          <ListTodo todos={this.props.todoData} onDelete={this.onDelete} onEdit={this.onEdit} onLogout={this.onLogout}/>
         </center>
       </>
     );

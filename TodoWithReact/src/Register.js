@@ -1,5 +1,4 @@
 import React from 'react';
-import history from './history';
 import RequestService from './RequestService';
 import { url } from './url';
 
@@ -32,8 +31,7 @@ export default class Register extends React.Component {
     .then((response) => {
       if (response.status === 200) {
         alert('You registered successfully.')
-        history.push('/');
-        window.location.reload()
+        this.props.history.push('/');
       }
     }).catch((err) => {
       if (err.response.status === 409) {

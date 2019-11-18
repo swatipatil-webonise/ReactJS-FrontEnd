@@ -23,8 +23,8 @@ export class Login extends React.Component {
       { username: this.refs.usernameRef.value, password: this.refs.passwordRef.value })
     .then((response) => {
       if (response.status === 200) {
-        history.push('/view');
-        window.location.reload()
+        localStorage.setItem('token', response.data.jwt);
+        this.props.history.push('/view');
       }
     }).catch((err) => {
       if (err.response.status === 404) {
