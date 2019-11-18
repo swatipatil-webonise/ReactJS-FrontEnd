@@ -1,4 +1,5 @@
 import { url } from '../../url';
+import history from '../../history'
 
 export const ADD_TODO = 'ADD_TODO';
 export const DELETE_TODO = 'DELETE_TODO';
@@ -46,6 +47,8 @@ export const getTodo = () => {
     }).catch(err => {
       if(err) {
         alert('Unauthorized request found.');
+        history.push('/');
+        window.location.reload();
       }
     })
   }
@@ -69,6 +72,8 @@ export const saveTodo = (id, textToAdd) => {
     }).catch((err) => {
       if(err) {
         alert('Unauthorized request found.');
+        history.push('/');
+        window.location.reload();
       }
     })
   }
@@ -91,7 +96,11 @@ export const removeTodo = (id) => {
         dispatch(deleteTodo(id));
       } 
     }).catch((err) => {
-      console.log(err);
+      if(err) {
+        alert('Unauthorized request found.');
+        history.push('/');
+        window.location.reload();
+      }
     })
   }
 }
@@ -114,6 +123,8 @@ export const editTodo = (id, textToSet) => {
     }).catch((err) => {
       if(err) {
         alert('Unauthorized request found.');
+        history.push('/');
+        window.location.reload();
       }
     })
   }
