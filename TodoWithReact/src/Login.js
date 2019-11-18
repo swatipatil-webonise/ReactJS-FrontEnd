@@ -1,5 +1,4 @@
 import React from 'react';
-import history from './history';
 import { Link } from 'react-router-dom'
 import Register from './Register';
 import RequestService from './RequestService';
