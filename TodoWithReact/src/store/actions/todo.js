@@ -6,8 +6,6 @@ export const DELETE_TODO = 'DELETE_TODO';
 export const UPDATE_TODO = 'UPDATE_TODO';
 export const LOAD_TODO = 'LOAD_TODO'
 
-const token = localStorage.getItem('token');
-
 export const loadTodo = (todos) => ({
   type: LOAD_TODO,
   todos,
@@ -40,13 +38,19 @@ export const getTodo = () => {
         'Content-Type': 'application/json',
         'Cache-Control': 'no-cache'
       }
-    })
-    .then(response => response.json())
-    .then(json => {
-      dispatch(loadTodo(json));
+    }).then(response => response.json()).then(json => {
+      if (json.status !== 500) {
+        dispatch(loadTodo(json));
+      } else {
+        alert('Invalid token found.');
+        localStorage.clear();
+        history.push('/');
+        window.location.reload();
+      }
     }).catch(err => {
-      if(err) {
+      if (err) {
         alert('Unauthorized request found.');
+        localStorage.clear();
         history.push('/');
         window.location.reload();
       }
@@ -65,13 +69,19 @@ export const saveTodo = (id, textToAdd) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ id: id, desc: textToAdd })
-    })
-    .then(response => response.json())
-    .then(json => {
-      dispatch(addTodo(json));
+    }).then(response => response.json()).then(json => {
+      if (json.status !== 500) {
+        dispatch(addTodo(json));
+      } else {
+        alert('Invalid token found.');
+        localStorage.clear();
+        history.push('/');
+        window.location.reload();
+      }
     }).catch((err) => {
-      if(err) {
+      if (err) {
         alert('Unauthorized request found.');
+        localStorage.clear();
         history.push('/');
         window.location.reload();
       }
@@ -89,15 +99,19 @@ export const removeTodo = (id) => {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       }
-    })
-    .then(response => response.json())
-    .then(json => { 
-      if ( json === 1) {
+    }).then(response => response.json()).then(json => {
+      if (json === 1) {
         dispatch(deleteTodo(id));
-      } 
+      } else if (json.status === 500) {
+        alert('Invalid token found.');
+        localStorage.clear();
+        history.push('/');
+        window.location.reload();
+      }
     }).catch((err) => {
-      if(err) {
+      if (err) {
         alert('Unauthorized request found.');
+        localStorage.clear();
         history.push('/');
         window.location.reload();
       }
@@ -116,13 +130,19 @@ export const editTodo = (id, textToSet) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ id: id, desc: textToSet })
-    })
-    .then(response => response.json())
-    .then(json => {
-      dispatch(updateTodo(json.id,json.desc));
+    }).then(response => response.json()).then(json => {
+      if (json.status !== 500) {
+        dispatch(updateTodo(json.id, json.desc));
+      } else {
+        alert('Invalid token found.');
+        localStorage.clear();
+        history.push('/');
+        window.location.reload();
+      }
     }).catch((err) => {
-      if(err) {
+      if (err) {
         alert('Unauthorized request found.');
+        localStorage.clear();
         history.push('/');
         window.location.reload();
       }
