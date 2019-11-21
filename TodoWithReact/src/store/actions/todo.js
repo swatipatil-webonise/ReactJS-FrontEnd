@@ -35,7 +35,7 @@ function redirectToLoginPage() {
 
 export const getTodo = () => {
   return dispatch => {
-    return fetch(`${url}/todojobs/`, {
+    return fetch(`${url}/todo-jobs/`, {
       mode: 'cors',
       method: 'GET',
       headers: {
@@ -62,7 +62,7 @@ export const getTodo = () => {
 
 export const saveTodo = (id, textToAdd) => {
   return dispatch => {
-    return fetch(`${url}/todojobs/`, {
+    return fetch(`${url}/todo-jobs/`, {
       mode: 'cors',
       method: 'POST',
       headers: {
@@ -89,7 +89,7 @@ export const saveTodo = (id, textToAdd) => {
 
 export const removeTodo = (id) => {
   return dispatch => {
-    return fetch(`${url}/todojobs/${id}`, {
+    return fetch(`${url}/todo-jobs/${id}`, {
       mode: 'cors',
       method: 'DELETE',
       headers: {
@@ -115,7 +115,7 @@ export const removeTodo = (id) => {
 
 export const editTodo = (id, textToSet) => {
   return dispatch => {
-    return fetch(`${url}/todojobs/`, {
+    return fetch(`${url}/todo-jobs/`, {
       mode: 'cors',
       method: 'PUT',
       headers: {
