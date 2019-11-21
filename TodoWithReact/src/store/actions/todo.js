@@ -27,6 +27,12 @@ export const updateTodo = (id, textToSet) => ({
   textToSet,
 });
 
+function redirectToLoginPage() {
+  localStorage.clear();
+  history.push('/');
+  window.location.reload();
+}
+
 export const getTodo = () => {
   return dispatch => {
     return fetch(`${url}/todojobs/`, {
@@ -43,16 +49,12 @@ export const getTodo = () => {
         dispatch(loadTodo(json));
       } else {
         alert('Invalid token found.');
-        localStorage.clear();
-        history.push('/');
-        window.location.reload();
+        redirectToLoginPage();
       }
     }).catch(err => {
       if (err) {
         alert('Unauthorized request found.');
-        localStorage.clear();
-        history.push('/');
-        window.location.reload();
+        redirectToLoginPage();
       }
     })
   }
@@ -74,16 +76,12 @@ export const saveTodo = (id, textToAdd) => {
         dispatch(addTodo(json));
       } else {
         alert('Invalid token found.');
-        localStorage.clear();
-        history.push('/');
-        window.location.reload();
+        redirectToLoginPage();
       }
     }).catch((err) => {
       if (err) {
         alert('Unauthorized request found.');
-        localStorage.clear();
-        history.push('/');
-        window.location.reload();
+        redirectToLoginPage();
       }
     })
   }
@@ -104,16 +102,12 @@ export const removeTodo = (id) => {
         dispatch(deleteTodo(id));
       } else if (json.status === 500) {
         alert('Invalid token found.');
-        localStorage.clear();
-        history.push('/');
-        window.location.reload();
+        redirectToLoginPage();
       }
     }).catch((err) => {
       if (err) {
         alert('Unauthorized request found.');
-        localStorage.clear();
-        history.push('/');
-        window.location.reload();
+        redirectToLoginPage();
       }
     })
   }
@@ -135,16 +129,12 @@ export const editTodo = (id, textToSet) => {
         dispatch(updateTodo(json.id, json.desc));
       } else {
         alert('Invalid token found.');
-        localStorage.clear();
-        history.push('/');
-        window.location.reload();
+        redirectToLoginPage();
       }
     }).catch((err) => {
       if (err) {
         alert('Unauthorized request found.');
-        localStorage.clear();
-        history.push('/');
-        window.location.reload();
+        redirectToLoginPage();
       }
     })
   }
