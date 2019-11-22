@@ -3,6 +3,11 @@ import { AddTodo } from './AddTodo';
 import { ListTodo } from './ListTodo';
 import { connect } from 'react-redux';
 import { saveTodo, removeTodo, editTodo, getTodo } from './store/actions/todo';
+const INC_TO_ID = 1;
+const EXTRA_COUNT_ADDED = 2;
+const INC_TO_PAGE_NUMBER = 1;
+const PAGE_SIZE = 3
+const FIRST_PAGE_NUMBER = 0;
 
 class Todo extends React.Component {
   constructor(props) {
@@ -12,11 +17,42 @@ class Todo extends React.Component {
       isUpdate: false,
       buttonValue: 'Add',
       updateId: -1,
+      pageNumber: 0,
+      nextId: 0,
     };
   }
 
   componentDidMount() {
-    this.props.getTodo();
+    this.props.getTodo(FIRST_PAGE_NUMBER);
+    this.setState({
+      nextId: parseInt(localStorage.getItem('nextId')) + INC_TO_ID,
+    })
+  }
+
+  onNext = () => {
+    if ((this.state.nextId - EXTRA_COUNT_ADDED) >= (this.state.pageNumber + INC_TO_PAGE_NUMBER) * PAGE_SIZE) {
+      this.setState({
+        pageNumber: ++this.state.pageNumber,
+      })
+      this.props.getTodo(this.state.pageNumber);
+      return true;
+    } else {
+      alert(`Can't go forword...`);
+      return;
+    }
+  }
+
+  onPrevious = () => {
+    if (this.state.pageNumber === FIRST_PAGE_NUMBER) {
+      alert(`Can't go backword...`);
+      return;
+    } else {
+      this.setState({
+        pageNumber: --this.state.pageNumber,
+      })
+      this.props.getTodo(this.state.pageNumber);
+      return true;
+    }
   }
 
   onUserType = event => {
@@ -40,7 +76,10 @@ class Todo extends React.Component {
         updateId: -1,
       })
     } else {
-      this.props.saveTodo(this.props.todoData.length + 1, this.state.description);
+      this.setState({
+        nextId: this.state.nextId + INC_TO_ID,
+      })
+      this.props.saveTodo(this.state.nextId, this.state.description, this.props.todoData.length);
       this.setState({
         description: '',
       })
@@ -51,8 +90,7 @@ class Todo extends React.Component {
     this.props.removeTodo(id);
   }
 
-  onEdit = (id) => {
-    let value = this.props.todoData[id - 1].desc;
+  onEdit = (id, value) => {
     this.setState({
       updateId: id,
       description: value,
@@ -72,7 +110,7 @@ class Todo extends React.Component {
         <center><br></br>
           <h1>Welcome to our todo app...</h1><br></br>
           <AddTodo buttonValue={this.state.buttonValue} description={this.state.description} onUserType={this.onUserType} onAddTodo={this.onAddTodo} /><br></br><br></br>
-          <ListTodo todos={this.props.todoData} onDelete={this.onDelete} onEdit={this.onEdit} onLogout={this.onLogout} />
+          <ListTodo todos={this.props.todoData} onDelete={this.onDelete} onEdit={this.onEdit} onPrevious={this.onPrevious} onLogout={this.onLogout} onNext={this.onNext} />
         </center> :
         <h1>404 Page not found</h1>
       }

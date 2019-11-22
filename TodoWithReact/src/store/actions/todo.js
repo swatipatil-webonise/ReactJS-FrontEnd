@@ -33,9 +33,9 @@ function redirectToLoginPage() {
   window.location.reload();
 }
 
-export const getTodo = () => {
+export const getTodo = (pageNumber) => {
   return dispatch => {
-    return fetch(`${url}/todo-jobs/`, {
+    return fetch(`${url}/todo-jobs/${pageNumber}`, {
       mode: 'cors',
       method: 'GET',
       headers: {
@@ -46,8 +46,12 @@ export const getTodo = () => {
       }
     }).then(response => response.json()).then(json => {
       if (json.status !== 500) {
-        dispatch(loadTodo(json));
-      } else {
+        if (pageNumber === 0) {
+          localStorage.setItem('nextId', json.totalElements);
+        }
+        dispatch(loadTodo(json.content));
+      }
+      else {
         alert('Invalid token found.');
         redirectToLoginPage();
       }
@@ -60,7 +64,7 @@ export const getTodo = () => {
   }
 }
 
-export const saveTodo = (id, textToAdd) => {
+export const saveTodo = (id, textToAdd, length) => {
   return dispatch => {
     return fetch(`${url}/todo-jobs/`, {
       mode: 'cors',
@@ -72,9 +76,10 @@ export const saveTodo = (id, textToAdd) => {
       },
       body: JSON.stringify({ id: id, desc: textToAdd })
     }).then(response => response.json()).then(json => {
-      if (json.status !== 500) {
+      if (json.status !== 200 && length < 3) {
         dispatch(addTodo(json));
-      } else {
+      }
+      if (json.status === 500) {
         alert('Invalid token found.');
         redirectToLoginPage();
       }
