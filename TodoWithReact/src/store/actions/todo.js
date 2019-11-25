@@ -46,9 +46,6 @@ export const getTodo = (pageNumber) => {
       }
     }).then(response => response.json()).then(json => {
       if (json.status !== 500) {
-        if (pageNumber === 0) {
-          localStorage.setItem('nextId', json.totalElements);
-        }
         dispatch(loadTodo(json.content));
       }
       else {
@@ -59,6 +56,8 @@ export const getTodo = (pageNumber) => {
       if (err) {
         alert('Unauthorized request found.');
         redirectToLoginPage();
+      } else if (err.response.status === 404) {
+        alert('Page not exist.');
       }
     })
   }

@@ -18,15 +18,12 @@ class Todo extends React.Component {
       buttonValue: 'Add',
       updateId: -1,
       pageNumber: 0,
-      nextId: 0,
+      nextId: 5,
     };
   }
 
   componentDidMount() {
     this.props.getTodo(FIRST_PAGE_NUMBER);
-    this.setState({
-      nextId: parseInt(localStorage.getItem('nextId')) + INC_TO_ID,
-    })
   }
 
   onNext = () => {
