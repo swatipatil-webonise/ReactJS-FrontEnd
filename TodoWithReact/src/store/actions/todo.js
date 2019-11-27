@@ -42,23 +42,16 @@ export const getTodo = (pageNumber) => {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache'
       }
     }).then(response => response.json()).then(json => {
-      if (json.status !== 500) {
+      if (json.status === 500) {
+        alert('Invalid Or Unauthorized token found.');
+        redirectToLoginPage();
+      } else {
         dispatch(loadTodo(json.content));
       }
-      else {
-        alert('Invalid token found.');
-        redirectToLoginPage();
-      }
     }).catch(err => {
-      if (err) {
-        alert('Unauthorized request found.');
-        redirectToLoginPage();
-      } else if (err.response.status === 404) {
-        alert('Page not exist.');
-      }
+      console.log(err);
     })
   }
 }
@@ -75,18 +68,14 @@ export const saveTodo = (id, textToAdd, length) => {
       },
       body: JSON.stringify({ id: id, desc: textToAdd })
     }).then(response => response.json()).then(json => {
-      if (json.status !== 200 && length < 3) {
+      if (json.status === 500) {
+        alert('Invalid Or Unauthorized token found.');
+        redirectToLoginPage();
+      } else if (json.status !== 200 && length < 3) {
         dispatch(addTodo(json));
       }
-      if (json.status === 500) {
-        alert('Invalid token found.');
-        redirectToLoginPage();
-      }
     }).catch((err) => {
-      if (err) {
-        alert('Unauthorized request found.');
-        redirectToLoginPage();
-      }
+      console.log(err);
     })
   }
 }
@@ -105,14 +94,11 @@ export const removeTodo = (id) => {
       if (json === 1) {
         dispatch(deleteTodo(id));
       } else if (json.status === 500) {
-        alert('Invalid token found.');
+        alert('Invalid Or Unauthorized token found.');
         redirectToLoginPage();
       }
     }).catch((err) => {
-      if (err) {
-        alert('Unauthorized request found.');
-        redirectToLoginPage();
-      }
+      console.log(err);
     })
   }
 }
@@ -129,17 +115,14 @@ export const editTodo = (id, textToSet) => {
       },
       body: JSON.stringify({ id: id, desc: textToSet })
     }).then(response => response.json()).then(json => {
-      if (json.status !== 500) {
-        dispatch(updateTodo(json.id, json.desc));
-      } else {
-        alert('Invalid token found.');
+      if (json.status === 500) {
+        alert('Invalid Or Unauthorized token found.');
         redirectToLoginPage();
+      } else {
+        dispatch(updateTodo(json.id, json.desc));
       }
     }).catch((err) => {
-      if (err) {
-        alert('Unauthorized request found.');
-        redirectToLoginPage();
-      }
+      console.log(err);
     })
   }
 }

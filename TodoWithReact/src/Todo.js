@@ -29,7 +29,7 @@ class Todo extends React.Component {
   onNext = () => {
     if ((this.state.nextId - EXTRA_COUNT_ADDED) >= (this.state.pageNumber + INC_TO_PAGE_NUMBER) * PAGE_SIZE) {
       this.setState({
-        pageNumber: ++this.state.pageNumber,
+        pageNumber : ++this.state.pageNumber,
       })
       this.props.getTodo(this.state.pageNumber);
       return true;
@@ -45,10 +45,9 @@ class Todo extends React.Component {
       return;
     } else {
       this.setState({
-        pageNumber: --this.state.pageNumber,
+        pageNumber : --this.state.pageNumber,
       })
       this.props.getTodo(this.state.pageNumber);
-      return true;
     }
   }
 
