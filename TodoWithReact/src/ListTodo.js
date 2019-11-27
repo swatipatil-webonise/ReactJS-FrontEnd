@@ -1,0 +1,38 @@
+import React from 'react';
+
+export class ListTodo extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  renderTodoList() {
+    return this.props.todos.map(todo =>
+      <tr key={todo.id}>
+        <td>{todo.id}</td>
+        <td>{todo.desc}</td>
+        <td><button onClick={this.props.onEdit.bind(null, todo.id, todo.desc)}>Edit</button></td>
+        <td><button onClick={this.props.onDelete.bind(null, todo.id)}>Delete</button></td>
+      </tr>
+    )
+  }
+
+  render() {
+    return (
+      <>
+        <table border="1">
+          <thead>
+            <tr><th>Id</th><th>Task to perform</th><th>Edit</th><th>Delete</th></tr>
+          </thead>
+          <tbody>
+            {this.renderTodoList()}
+          </tbody>
+        </table>
+        <br />
+        <button onClick={this.props.onPrevious.bind(null)}>Previous</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button onClick={this.props.onNext.bind(null)}>Next</button>
+        <br /> <br />
+        <button onClick={this.props.onLogout.bind(null)}>Log out</button>
+      </>
+    );
+  }
+}
